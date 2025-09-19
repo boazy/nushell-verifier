@@ -1,5 +1,5 @@
 from typing import List
-from .models import ScriptAnalysis, CompatibilityIssue
+from .models import ScriptAnalysis
 
 
 class Reporter:
@@ -19,7 +19,7 @@ class Reporter:
         total_count = len(analyses)
 
         print(f"\n{'='*60}")
-        print(f"NUSHELL COMPATIBILITY REPORT")
+        print("NUSHELL COMPATIBILITY REPORT")
         print(f"{'='*60}")
         print(f"Total scripts: {total_count}")
         print(f"Compatible: {compatible_count}")

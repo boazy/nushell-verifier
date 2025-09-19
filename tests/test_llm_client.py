@@ -1,4 +1,3 @@
-import pytest
 from unittest.mock import patch, MagicMock
 from nushell_verifier.llm_client import LLMClient
 from nushell_verifier.models import Config
@@ -117,7 +116,7 @@ def test_convert_blog_to_instructions_uses_safe_params(mock_completion):
     client = LLMClient(config)
 
     release = ReleaseInfo(version="0.95.0", blog_post_url="test")
-    result = client.convert_blog_to_instructions(release, "test content")
+    client.convert_blog_to_instructions(release, "test content")
 
     # Verify the call was made without temperature
     mock_completion.assert_called_once()

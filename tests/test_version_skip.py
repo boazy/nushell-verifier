@@ -2,9 +2,8 @@
 Tests for skipping scripts that are already compatible with target version.
 """
 import tempfile
-import pytest
 from pathlib import Path
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from nushell_verifier.analyzer import NuShellAnalyzer
 from nushell_verifier.models import Config, ScriptFile, CompatibilityMethod
 from nushell_verifier.version_manager import VersionManager
@@ -78,7 +77,7 @@ class TestVersionSkipping:
 
         # Verify script was skipped
         assert len(results) == 1
-        assert results[0].is_compatible is True
+        assert results[0].is_compatible
         assert len(results[0].issues) == 0
 
         # Verify LLM was not called for analysis
@@ -122,7 +121,7 @@ class TestVersionSkipping:
 
         # Verify script was skipped
         assert len(results) == 1
-        assert results[0].is_compatible is True
+        assert results[0].is_compatible
 
         # Verify skip message shows correct versions
         print_calls = [call[0][0] for call in mock_print.call_args_list if call and call[0]]
@@ -267,4 +266,4 @@ class TestVersionSkipping:
 
         # Verify script was skipped properly
         assert len(results) == 1
-        assert results[0].is_compatible is True
+        assert results[0].is_compatible

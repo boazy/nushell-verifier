@@ -2,8 +2,6 @@
 Tests for progress management functionality.
 """
 import tempfile
-import pytest
-import time
 from pathlib import Path
 from unittest.mock import patch, MagicMock
 from nushell_verifier.progress import (

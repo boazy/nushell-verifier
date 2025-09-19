@@ -3,7 +3,6 @@ Tests for the instruction caching functionality.
 """
 import json
 import tempfile
-import pytest
 from pathlib import Path
 from unittest.mock import patch
 from nushell_verifier.cache import InstructionCache

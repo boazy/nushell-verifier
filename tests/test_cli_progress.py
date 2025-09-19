@@ -2,8 +2,6 @@
 Tests for CLI integration with progress functionality.
 """
 import tempfile
-import pytest
-from pathlib import Path
 from unittest.mock import patch, MagicMock
 from click.testing import CliRunner
 from nushell_verifier.cli import cli
@@ -35,7 +33,7 @@ class TestCLIProgress:
         mock_analyzer_instance.analyze_scripts.return_value = []
 
         # Mock reporter
-        mock_reporter_instance = mock_reporter.return_value
+        mock_reporter.return_value
 
         # Run CLI with --no-progress flag
         result = self.runner.invoke(cli, [
@@ -62,7 +60,7 @@ class TestCLIProgress:
         mock_analyzer_instance.analyze_scripts.return_value = []
 
         # Mock reporter
-        mock_reporter_instance = mock_reporter.return_value
+        mock_reporter.return_value
 
         # Run CLI without --no-progress flag
         result = self.runner.invoke(cli, [
@@ -88,7 +86,7 @@ class TestCLIProgress:
         mock_analyzer_instance.analyze_scripts.return_value = []
 
         # Mock reporter
-        mock_reporter_instance = mock_reporter.return_value
+        mock_reporter.return_value
 
         # Run CLI with --no-progress and other flags
         result = self.runner.invoke(cli, [

@@ -2,12 +2,10 @@
 Integration tests for analyzer with progress functionality.
 """
 import tempfile
-import pytest
 from pathlib import Path
 from unittest.mock import patch, MagicMock
 from nushell_verifier.analyzer import NuShellAnalyzer
 from nushell_verifier.models import Config, ScriptFile, ReleaseInfo, CompatibilityMethod
-from nushell_verifier.progress import ProgressConfig
 
 
 class TestAnalyzerProgress:
@@ -150,7 +148,7 @@ class TestAnalyzerProgress:
         analyzer = NuShellAnalyzer(self.config, disable_progress=True)
 
         # Run analysis
-        results = analyzer.analyze_scripts("0.97.0")
+        analyzer.analyze_scripts("0.97.0")
 
         # Check that immediate results were printed
         print_calls = [call[0][0] for call in mock_print.call_args_list if call and call[0]]
@@ -195,7 +193,7 @@ class TestAnalyzerProgress:
         analyzer = NuShellAnalyzer(self.config, disable_progress=True)
 
         # Run analysis
-        results = analyzer.analyze_scripts("0.97.0")
+        analyzer.analyze_scripts("0.97.0")
 
         # Check that issues were displayed immediately
         print_calls = [call[0][0] for call in mock_print.call_args_list if call and call[0]]
@@ -269,7 +267,7 @@ class TestAnalyzerProgress:
         analyzer = NuShellAnalyzer(self.config, disable_progress=True)
 
         # Run analysis
-        results = analyzer.analyze_scripts("0.97.0")
+        analyzer.analyze_scripts("0.97.0")
 
         # Check that batch summary was printed
         print_calls = [call[0][0] for call in mock_print.call_args_list if call and call[0]]

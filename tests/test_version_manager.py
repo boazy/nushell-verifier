@@ -1,4 +1,3 @@
-import pytest
 from nushell_verifier.version_manager import VersionManager
 
 
@@ -29,10 +28,10 @@ def test_is_version_after():
     """Test version comparison."""
     vm = VersionManager()
 
-    assert vm.is_version_after("0.95.0", "0.90.0") == True
-    assert vm.is_version_after("0.90.0", "0.95.0") == False
-    assert vm.is_version_after("0.95.0", "0.95.0") == False
-    assert vm.is_version_after("1.0.0", "0.99.0") == True
+    assert vm.is_version_after("0.95.0", "0.90.0")
+    assert not vm.is_version_after("0.90.0", "0.95.0")
+    assert not vm.is_version_after("0.95.0", "0.95.0")
+    assert vm.is_version_after("1.0.0", "0.99.0")
 
 
 def test_is_version_same_or_after():
@@ -40,19 +39,19 @@ def test_is_version_same_or_after():
     vm = VersionManager()
 
     # Same version
-    assert vm.is_version_same_or_after("0.95.0", "0.95.0") == True
+    assert vm.is_version_same_or_after("0.95.0", "0.95.0")
 
     # Newer version
-    assert vm.is_version_same_or_after("0.96.0", "0.95.0") == True
-    assert vm.is_version_same_or_after("1.0.0", "0.99.0") == True
+    assert vm.is_version_same_or_after("0.96.0", "0.95.0")
+    assert vm.is_version_same_or_after("1.0.0", "0.99.0")
 
     # Older version
-    assert vm.is_version_same_or_after("0.94.0", "0.95.0") == False
-    assert vm.is_version_same_or_after("0.99.0", "1.0.0") == False
+    assert not vm.is_version_same_or_after("0.94.0", "0.95.0")
+    assert not vm.is_version_same_or_after("0.99.0", "1.0.0")
 
     # With v prefix
-    assert vm.is_version_same_or_after("v0.95.0", "0.95.0") == True
-    assert vm.is_version_same_or_after("0.95.0", "v0.95.0") == True
+    assert vm.is_version_same_or_after("v0.95.0", "0.95.0")
+    assert vm.is_version_same_or_after("0.95.0", "v0.95.0")
 
 
 def test_update_version_comment():

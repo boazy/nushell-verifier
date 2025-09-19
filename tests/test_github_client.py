@@ -1,4 +1,4 @@
-import pytest
+import subprocess
 from unittest.mock import patch, MagicMock
 from nushell_verifier.github_client import GitHubClient
 
@@ -79,5 +79,3 @@ def test_github_client_explicit_token_takes_precedence():
         mock_run.assert_not_called()
 
 
-# Import here to avoid circular imports at module level
-import subprocess

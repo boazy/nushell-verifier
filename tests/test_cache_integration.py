@@ -2,9 +2,8 @@
 Integration tests for caching functionality with CLI and analyzer.
 """
 import tempfile
-import pytest
 from pathlib import Path
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from click.testing import CliRunner
 from nushell_verifier.cli import cli
 from nushell_verifier.analyzer import NuShellAnalyzer
@@ -116,7 +115,7 @@ class TestCacheIntegration:
         )
 
         with patch('nushell_verifier.analyzer.GitHubClient') as mock_github, \
-             patch('nushell_verifier.analyzer.LLMClient') as mock_llm, \
+             patch('nushell_verifier.analyzer.LLMClient'), \
              patch('nushell_verifier.analyzer.NuShellScriptScanner') as mock_scanner:
 
             # Mock scanner to return no scripts (simplify test)

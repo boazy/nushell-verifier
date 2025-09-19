@@ -1,7 +1,6 @@
 """
 Unit tests for blog path extraction to prevent regression.
 """
-import pytest
 from nushell_verifier.github_client import GitHubClient
 
 

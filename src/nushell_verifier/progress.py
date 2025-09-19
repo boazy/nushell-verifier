@@ -2,7 +2,7 @@
 Real-time progress management for script analysis.
 """
 import time
-from typing import Optional, Callable, Any
+from typing import Optional
 from pathlib import Path
 from alive_progress import alive_bar
 from dataclasses import dataclass
@@ -67,7 +67,7 @@ class ScriptProgressManager:
         if not self.disabled and self._bar:
             try:
                 self._bar.__exit__(exc_type, exc_val, exc_tb)
-            except:
+            except Exception:
                 pass  # Ignore cleanup errors
 
     def set_phase(self, phase: str, estimated_tokens: Optional[int] = None):

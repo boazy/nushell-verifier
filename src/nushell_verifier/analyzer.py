@@ -1,11 +1,11 @@
 from typing import List, Optional
-from .models import Config, ScriptAnalysis, ScriptFile, ReleaseInfo
+from .models import Config, ScriptAnalysis, ScriptFile, ReleaseInfo, CompatibilityMethod
 from .scanner import NuShellScriptScanner
 from .github_client import GitHubClient
 from .llm_client import LLMClient
 from .version_manager import VersionManager
 from .cache import InstructionCache
-from .progress import BatchProgressManager, ScriptProgressManager, estimate_tokens_for_script, StreamingProgressCallback
+from .progress import BatchProgressManager, estimate_tokens_for_script, StreamingProgressCallback
 
 
 class NuShellAnalyzer:
@@ -74,7 +74,7 @@ class NuShellAnalyzer:
                 )
 
             if cached_instructions:
-                print(f"  ✓ Using cached compatibility instructions")
+                print("  ✓ Using cached compatibility instructions")
                 release.compatibility_instructions = cached_instructions
                 compatibility_instructions.append(cached_instructions)
                 cache_hits += 1
@@ -83,7 +83,7 @@ class NuShellAnalyzer:
                 cache_misses += 1
                 blog_content = self.github_client.fetch_blog_post_content(release)
                 if blog_content:
-                    print(f"  Generating compatibility instructions...")
+                    print("  Generating compatibility instructions...")
                     instructions = self.llm_client.convert_blog_to_instructions(release, blog_content)
                     release.compatibility_instructions = instructions
                     compatibility_instructions.append(instructions)
@@ -95,7 +95,7 @@ class NuShellAnalyzer:
                             instructions,
                             f"{self.config.llm_provider}/{self.config.llm_model}"
                         )
-                        print(f"  ✓ Cached instructions for future use")
+                        print("  ✓ Cached instructions for future use")
                 else:
                     print(f"  Warning: Could not fetch blog post for {release.version}")
 
@@ -149,9 +149,9 @@ class NuShellAnalyzer:
                     if token.startswith("__USAGE__"):
                         # Extract usage info if available
                         try:
-                            usage_str = token[9:]  # Remove "__USAGE__" prefix
                             # Handle usage updates if needed
-                        except:
+                            pass
+                        except Exception:
                             pass
                     else:
                         callback.on_token(token)
@@ -257,5 +257,3 @@ class NuShellAnalyzer:
             print(f"Warning: Could not update version comment in {script.path}: {e}")
 
 
-# Import here to avoid circular imports
-from .models import CompatibilityMethod

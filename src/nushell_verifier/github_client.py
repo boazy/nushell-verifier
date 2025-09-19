@@ -1,7 +1,7 @@
 import re
 import subprocess
 import httpx
-from typing import List, Optional, Dict, Any
+from typing import List, Optional
 from .models import ReleaseInfo
 
 

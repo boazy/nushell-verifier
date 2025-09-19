@@ -62,7 +62,6 @@ class VersionManager:
 
         # Look for existing version comment in header
         existing_comment_line = None
-        first_non_comment_line = None
 
         for i, line in enumerate(lines):
             if self.VERSION_COMMENT_PATTERN.match(line):
@@ -71,7 +70,6 @@ class VersionManager:
 
             stripped = line.strip()
             if stripped and not stripped.startswith("#"):
-                first_non_comment_line = i
                 break
 
         if existing_comment_line is not None:
