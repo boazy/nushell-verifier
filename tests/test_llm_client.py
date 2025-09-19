@@ -14,7 +14,7 @@ def test_safe_params_gpt4():
     assert "temperature" in params
     assert params["temperature"] == 0.1
     assert "max_tokens" in params
-    assert params["max_tokens"] == 4000
+    assert params["max_tokens"] == 32000
 
 
 def test_safe_params_gpt5():
@@ -26,7 +26,7 @@ def test_safe_params_gpt5():
 
     assert "temperature" not in params
     assert "max_tokens" in params
-    assert params["max_tokens"] == 4000
+    assert params["max_tokens"] == 32000
 
 
 def test_safe_params_with_custom_temperature():

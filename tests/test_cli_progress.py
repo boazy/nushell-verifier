@@ -21,9 +21,9 @@ class TestCLIProgress:
         """Clean up temporary directory."""
         self.temp_dir.cleanup()
 
-    @patch('nushell_verifier.cli.NuShellAnalyzer')
-    @patch('nushell_verifier.cli.Reporter')
-    @patch('nushell_verifier.cli.load_config')
+    @patch('nushell_verifier.analyzer.NuShellAnalyzer')
+    @patch('nushell_verifier.reporter.Reporter')
+    @patch('nushell_verifier.config.load_config')
     def test_no_progress_flag(self, mock_load_config, mock_reporter, mock_analyzer):
         """Test --no-progress flag is passed to analyzer."""
         # Mock config
@@ -48,9 +48,9 @@ class TestCLIProgress:
         # Verify analyzer was initialized with disable_progress=True
         mock_analyzer.assert_called_once_with(mock_config, disable_progress=True)
 
-    @patch('nushell_verifier.cli.NuShellAnalyzer')
-    @patch('nushell_verifier.cli.Reporter')
-    @patch('nushell_verifier.cli.load_config')
+    @patch('nushell_verifier.analyzer.NuShellAnalyzer')
+    @patch('nushell_verifier.reporter.Reporter')
+    @patch('nushell_verifier.config.load_config')
     def test_progress_enabled_by_default(self, mock_load_config, mock_reporter, mock_analyzer):
         """Test progress is enabled by default."""
         # Mock config
@@ -74,9 +74,9 @@ class TestCLIProgress:
         # Verify analyzer was initialized with disable_progress=False
         mock_analyzer.assert_called_once_with(mock_config, disable_progress=False)
 
-    @patch('nushell_verifier.cli.NuShellAnalyzer')
-    @patch('nushell_verifier.cli.Reporter')
-    @patch('nushell_verifier.cli.load_config')
+    @patch('nushell_verifier.analyzer.NuShellAnalyzer')
+    @patch('nushell_verifier.reporter.Reporter')
+    @patch('nushell_verifier.config.load_config')
     def test_no_progress_with_other_flags(self, mock_load_config, mock_reporter, mock_analyzer):
         """Test --no-progress works with other CLI flags."""
         # Mock config
@@ -108,7 +108,7 @@ class TestCLIProgress:
         # Verify analyze_scripts was called with correct version
         mock_analyzer_instance.analyze_scripts.assert_called_once_with(target_version='0.97.0')
 
-    @patch('nushell_verifier.cli.InstructionCache')
+    @patch('nushell_verifier.cache.InstructionCache')
     def test_no_progress_with_cache_commands(self, mock_cache):
         """Test --no-progress doesn't interfere with cache commands."""
         # Mock cache
@@ -139,9 +139,9 @@ class TestCLIProgress:
         assert '--no-progress' in result.output
         assert 'Disable progress bars and spinners' in result.output
 
-    @patch('nushell_verifier.cli.NuShellAnalyzer')
-    @patch('nushell_verifier.cli.Reporter')
-    @patch('nushell_verifier.cli.load_config')
+    @patch('nushell_verifier.analyzer.NuShellAnalyzer')
+    @patch('nushell_verifier.reporter.Reporter')
+    @patch('nushell_verifier.config.load_config')
     def test_exception_handling_with_progress(self, mock_load_config, mock_reporter, mock_analyzer):
         """Test exception handling when progress is enabled/disabled."""
         # Mock config
@@ -162,9 +162,9 @@ class TestCLIProgress:
         assert result.exit_code == 1
         assert "Error: Test error" in result.output
 
-    @patch('nushell_verifier.cli.NuShellAnalyzer')
-    @patch('nushell_verifier.cli.Reporter')
-    @patch('nushell_verifier.cli.load_config')
+    @patch('nushell_verifier.analyzer.NuShellAnalyzer')
+    @patch('nushell_verifier.reporter.Reporter')
+    @patch('nushell_verifier.config.load_config')
     def test_config_overrides_with_progress(self, mock_load_config, mock_reporter, mock_analyzer):
         """Test configuration overrides work with progress options."""
         # Mock config
@@ -194,9 +194,9 @@ class TestCLIProgress:
         # Verify analyzer was initialized correctly
         mock_analyzer.assert_called_once_with(mock_config, disable_progress=True)
 
-    @patch('nushell_verifier.cli.NuShellAnalyzer')
-    @patch('nushell_verifier.cli.Reporter')
-    @patch('nushell_verifier.cli.load_config')
+    @patch('nushell_verifier.analyzer.NuShellAnalyzer')
+    @patch('nushell_verifier.reporter.Reporter')
+    @patch('nushell_verifier.config.load_config')
     def test_progress_flag_type_checking(self, mock_load_config, mock_reporter, mock_analyzer):
         """Test that progress flag is properly typed as boolean."""
         # Mock config
@@ -223,7 +223,7 @@ class TestCLIProgress:
         # Cache commands should exit early, so progress setting shouldn't matter
 
         # Test --no-progress with --cache-info
-        with patch('nushell_verifier.cli.InstructionCache') as mock_cache:
+        with patch('nushell_verifier.cache.InstructionCache') as mock_cache:
             mock_cache_instance = mock_cache.return_value
             mock_cache_instance.get_cache_info.return_value = {
                 'cache_directory': '/test',
@@ -237,7 +237,7 @@ class TestCLIProgress:
             assert result.exit_code == 0
 
         # Test --no-progress with --clear-cache
-        with patch('nushell_verifier.cli.InstructionCache') as mock_cache:
+        with patch('nushell_verifier.cache.InstructionCache') as mock_cache:
             mock_cache_instance = mock_cache.return_value
             mock_cache_instance.clear_cache.return_value = 0
 
