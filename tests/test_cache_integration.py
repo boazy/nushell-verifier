@@ -26,10 +26,10 @@ class TestCacheIntegration:
 
     @patch('nushell_verifier.cache.get_cache_path')
     def test_cache_info_cli_empty(self, mock_cache_path):
-        """Test --cache-info with empty cache."""
+        """Test cache info with empty cache."""
         mock_cache_path.return_value = self.cache_dir
 
-        result = self.runner.invoke(cli, ['--cache-info'])
+        result = self.runner.invoke(cli, ['cache', 'info'])
 
         assert result.exit_code == 0
         assert "Cache Information:" in result.output
@@ -39,7 +39,7 @@ class TestCacheIntegration:
 
     @patch('nushell_verifier.cache.get_cache_path')
     def test_cache_info_cli_with_data(self, mock_cache_path):
-        """Test --cache-info with cached data."""
+        """Test cache info with cached data."""
         mock_cache_path.return_value = self.cache_dir
 
         # Create some test cache data
@@ -47,7 +47,7 @@ class TestCacheIntegration:
         cache.save_instructions("0.107.0", "test instructions 1", "gpt-4")
         cache.save_instructions("0.106.0", "test instructions 2", "gpt-4")
 
-        result = self.runner.invoke(cli, ['--cache-info'])
+        result = self.runner.invoke(cli, ['cache', 'info'])
 
         assert result.exit_code == 0
         assert "Exists: True" in result.output
@@ -56,17 +56,17 @@ class TestCacheIntegration:
 
     @patch('nushell_verifier.cache.get_cache_path')
     def test_clear_cache_cli_empty(self, mock_cache_path):
-        """Test --clear-cache with empty cache."""
+        """Test cache clean with empty cache."""
         mock_cache_path.return_value = self.cache_dir
 
-        result = self.runner.invoke(cli, ['--clear-cache'])
+        result = self.runner.invoke(cli, ['cache', 'clean'])
 
         assert result.exit_code == 0
         assert "Cache was already empty" in result.output
 
     @patch('nushell_verifier.cache.get_cache_path')
     def test_clear_cache_cli_with_data(self, mock_cache_path):
-        """Test --clear-cache with cached data."""
+        """Test cache clean with cached data."""
         mock_cache_path.return_value = self.cache_dir
 
         # Create some test cache data
@@ -74,7 +74,7 @@ class TestCacheIntegration:
         cache.save_instructions("0.107.0", "test instructions 1", "gpt-4")
         cache.save_instructions("0.106.0", "test instructions 2", "gpt-4")
 
-        result = self.runner.invoke(cli, ['--clear-cache'])
+        result = self.runner.invoke(cli, ['cache', 'clean'])
 
         assert result.exit_code == 0
         assert "Cleared 2 cached compatibility instruction(s)" in result.output

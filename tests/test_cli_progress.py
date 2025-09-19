@@ -107,8 +107,8 @@ class TestCLIProgress:
         mock_analyzer_instance.analyze_scripts.assert_called_once_with(target_version='0.97.0')
 
     @patch('nushell_verifier.cache.InstructionCache')
-    def test_no_progress_with_cache_commands(self, mock_cache):
-        """Test --no-progress doesn't interfere with cache commands."""
+    def test_cache_commands_work_independently(self, mock_cache):
+        """Test cache commands work independently."""
         # Mock cache
         mock_cache_instance = mock_cache.return_value
         mock_cache_instance.get_cache_info.return_value = {
@@ -119,14 +119,14 @@ class TestCLIProgress:
             'versions': []
         }
 
-        # Test --cache-info with --no-progress
-        result = self.runner.invoke(cli, ['--no-progress', '--cache-info'])
+        # Test cache info command
+        result = self.runner.invoke(cli, ['cache', 'info'])
         assert result.exit_code == 0
         assert "Cache Information:" in result.output
 
-        # Test --clear-cache with --no-progress
+        # Test cache clean command
         mock_cache_instance.clear_cache.return_value = 0
-        result = self.runner.invoke(cli, ['--no-progress', '--clear-cache'])
+        result = self.runner.invoke(cli, ['cache', 'clean'])
         assert result.exit_code == 0
         assert "Cache was already empty" in result.output
 
@@ -215,12 +215,15 @@ class TestCLIProgress:
         assert isinstance(kwargs['disable_progress'], bool)
         assert kwargs['disable_progress'] is True
 
-    def test_no_progress_flag_mutually_exclusive_with_cache_flags(self):
-        """Test that --no-progress can be used with cache management flags."""
-        # This test ensures --no-progress doesn't conflict with cache commands
-        # Cache commands should exit early, so progress setting shouldn't matter
+    def test_cache_subcommands_exist(self):
+        """Test that cache subcommands exist and work properly."""
+        # Test cache help shows subcommands
+        result = self.runner.invoke(cli, ['cache', '--help'])
+        assert result.exit_code == 0
+        assert 'info' in result.output
+        assert 'clean' in result.output
 
-        # Test --no-progress with --cache-info
+        # Test cache commands work with mocked dependencies
         with patch('nushell_verifier.cache.InstructionCache') as mock_cache:
             mock_cache_instance = mock_cache.return_value
             mock_cache_instance.get_cache_info.return_value = {
@@ -231,13 +234,9 @@ class TestCLIProgress:
                 'versions': []
             }
 
-            result = self.runner.invoke(cli, ['--no-progress', '--cache-info'])
+            result = self.runner.invoke(cli, ['cache', 'info'])
             assert result.exit_code == 0
 
-        # Test --no-progress with --clear-cache
-        with patch('nushell_verifier.cache.InstructionCache') as mock_cache:
-            mock_cache_instance = mock_cache.return_value
             mock_cache_instance.clear_cache.return_value = 0
-
-            result = self.runner.invoke(cli, ['--no-progress', '--clear-cache'])
+            result = self.runner.invoke(cli, ['cache', 'clean'])
             assert result.exit_code == 0
