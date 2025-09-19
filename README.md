@@ -249,13 +249,34 @@ nushell-verifier --verbose
 mise use python@3.13
 
 # Install dependencies
-uv sync
+mise install  # or mise i
 
 # Run tests
-uv run pytest
+mise test
+
+# Lint code
+mise lint
 
 # Run the CLI
-uv run nushell-verifier --help
+mise nv --help  # or mise run nushell-verifier --help
+```
+
+### Available Mise Tasks
+
+The project includes several mise tasks for common development operations:
+
+```bash
+# Install dependencies
+mise install      # or mise i
+
+# Run tests
+mise test
+
+# Lint the code
+mise lint
+
+# Run nushell-verifier
+mise nv           # or mise run nushell-verifier
 ```
 
 ### Project Structure
