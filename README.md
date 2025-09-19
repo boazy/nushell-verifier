@@ -19,23 +19,15 @@ A CLI tool to check NuShell script compatibility with different NuShell versions
 ### Prerequisites
 
 - Python 3.13+
-- [uv](https://github.com/astral-sh/uv) (recommended) or pip
+- [uv](https://github.com/astral-sh/uv)
 - [mise](https://mise.jdx.dev/) (optional, for Python version management)
 
-### Using uv (recommended)
+### Using uv
 
 ```bash
 git clone <repository-url>
 cd nushell-verifier
 uv sync
-```
-
-### Using pip
-
-```bash
-git clone <repository-url>
-cd nushell-verifier
-pip install -e .
 ```
 
 ## Configuration
@@ -245,11 +237,11 @@ nushell-verifier --verbose
 ### Setup Development Environment
 
 ```bash
-# Install mise for Python version management
-mise use python@3.13
+# Trust the local mise directory
+mise trust
 
-# Install dependencies
-mise install  # or mise i
+# Install required tools
+mise install
 
 # Run tests
 mise test
@@ -258,7 +250,7 @@ mise test
 mise lint
 
 # Run the CLI
-mise nv --help  # or mise run nushell-verifier --help
+mise nv -- --help  # or mise run nushell-verifier -- --help
 ```
 
 ### Available Mise Tasks
@@ -266,9 +258,6 @@ mise nv --help  # or mise run nushell-verifier --help
 The project includes several mise tasks for common development operations:
 
 ```bash
-# Install dependencies
-mise install      # or mise i
-
 # Run tests
 mise test
 
@@ -279,25 +268,33 @@ mise lint
 mise nv           # or mise run nushell-verifier
 ```
 
+### Running with uv
+
+You can run the app directly with [uv](https://docs.astral.sh/uv/).
+
+```bash
+uv run nushell-verifier --help
+```
+
 ### Project Structure
 
 ```
 nushell-verifier/
-   src/nushell_verifier/
-      __init__.py           # Package initialization
-      main.py              # Entry point
-      cli.py               # CLI interface
-      config.py            # Configuration management
-      models.py            # Data models
-      scanner.py           # Script file scanner
-      version_manager.py   # Version handling
-      github_client.py     # GitHub API client
-      llm_client.py        # LLM integration
-      analyzer.py          # Main analysis logic
-      reporter.py          # Report generation
-   tests/                   # Test suite
-   pyproject.toml          # Project configuration
-   README.md               # This file
+       src/nushell_verifier/
+            __init__.py           # Package initialization
+            main.py              # Entry point
+            cli.py               # CLI interface
+            config.py            # Configuration management
+            models.py            # Data models
+            scanner.py           # Script file scanner
+            version_manager.py   # Version handling
+            github_client.py     # GitHub API client
+            llm_client.py        # LLM integration
+            analyzer.py          # Main analysis logic
+            reporter.py          # Report generation
+       tests/                   # Test suite
+       pyproject.toml          # Project configuration
+       README.md               # This file
 ```
 
 ## Contributing

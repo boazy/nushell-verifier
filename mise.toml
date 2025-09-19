@@ -5,11 +5,6 @@ python.uv_venv_auto = true
 python = "3.13"
 ruff = "latest"
 
-[tasks.install]
-description = "Install dependencies"
-alias = "i"
-run = "uv pip install -r requirements.txt"
-
 [tasks.test]
 description = "Run tests"
 run = "python -m pytest"
@@ -21,5 +16,5 @@ run = "ruff check ."
 [tasks.nushell-verifier]
 description = "Run nushell-verifier"
 alias = "nv"
-run = "python -m nushell_verifier"
+run = "uv run nushell-verifier"
 
