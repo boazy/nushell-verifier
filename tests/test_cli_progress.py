@@ -120,7 +120,7 @@ class TestCLIProgress:
         }
 
         # Test cache info command
-        result = self.runner.invoke(cli, ['cache', 'info'])
+        result = self.runner.invoke(cli, ['cache', 'info', '--short'])
         assert result.exit_code == 0
         assert "Cache Information:" in result.output
 
@@ -234,7 +234,7 @@ class TestCLIProgress:
                 'versions': []
             }
 
-            result = self.runner.invoke(cli, ['cache', 'info'])
+            result = self.runner.invoke(cli, ['cache', 'info', '--short'])
             assert result.exit_code == 0
 
             mock_cache_instance.clear_cache.return_value = 0

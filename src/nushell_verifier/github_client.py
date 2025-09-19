@@ -68,6 +68,10 @@ class GitHubClient:
 
         return self._fetch_file_content(self.blog_repo, blog_path)
 
+    def get_all_releases(self, limit: Optional[int] = None) -> List[ReleaseInfo]:
+        """Get all releases (public wrapper around _get_releases)."""
+        return self._get_releases(limit)
+
     def _get_releases(self, limit: Optional[int] = None) -> List[ReleaseInfo]:
         """Fetch releases from GitHub API."""
         headers = {}

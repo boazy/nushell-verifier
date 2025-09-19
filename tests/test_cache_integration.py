@@ -29,7 +29,7 @@ class TestCacheIntegration:
         """Test cache info with empty cache."""
         mock_cache_path.return_value = self.cache_dir
 
-        result = self.runner.invoke(cli, ['cache', 'info'])
+        result = self.runner.invoke(cli, ['cache', 'info', '--short'])
 
         assert result.exit_code == 0
         assert "Cache Information:" in result.output
@@ -47,7 +47,7 @@ class TestCacheIntegration:
         cache.save_instructions("0.107.0", "test instructions 1", "gpt-4")
         cache.save_instructions("0.106.0", "test instructions 2", "gpt-4")
 
-        result = self.runner.invoke(cli, ['cache', 'info'])
+        result = self.runner.invoke(cli, ['cache', 'info', '--short'])
 
         assert result.exit_code == 0
         assert "Exists: True" in result.output
@@ -215,7 +215,7 @@ class TestCacheIntegration:
 
             assert cache.cache_dir.exists()
             assert cache.instructions_dir.exists()
-            assert (cache.instructions_dir / "0.107.0_gpt-4.json").exists()
+            assert (cache.instructions_dir / "0.107.0.json").exists()
 
     def test_cache_with_different_models(self):
         """Test cache behavior with different LLM models."""
@@ -225,12 +225,16 @@ class TestCacheIntegration:
             # Save with gpt-4
             cache.save_instructions("0.107.0", "gpt-4 instructions", "gpt-4")
 
-            # Save with claude-3 (should be separate cache entry)
+            # Should be retrievable with correct model
+            assert cache.get_cached_instructions("0.107.0", "gpt-4") == "gpt-4 instructions"
+
+            # Save with claude-3 (should overwrite previous entry)
             cache.save_instructions("0.107.0", "claude instructions", "claude-3")
 
-            # Both should be retrievable with correct model
-            assert cache.get_cached_instructions("0.107.0", "gpt-4") == "gpt-4 instructions"
+            # Now only claude-3 instructions should be retrievable
             assert cache.get_cached_instructions("0.107.0", "claude-3") == "claude instructions"
+            # gpt-4 should return None since it was overwritten
+            assert cache.get_cached_instructions("0.107.0", "gpt-4") is None
 
             # Wrong model should return None
             assert cache.get_cached_instructions("0.107.0", "unknown") is None

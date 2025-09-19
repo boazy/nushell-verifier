@@ -22,9 +22,8 @@ class InstructionCache:
         Returns:
             Cached instructions if available and valid, None otherwise
         """
-        # Create safe filename from model name
-        safe_model = llm_model.replace("/", "_")
-        cache_file = self.instructions_dir / f"{version}_{safe_model}.json"
+        # Use only version in filename
+        cache_file = self.instructions_dir / f"{version}.json"
 
         if not cache_file.exists():
             return None
@@ -70,9 +69,8 @@ class InstructionCache:
             "llm_model": llm_model
         }
 
-        # Create safe filename from model name
-        safe_model = llm_model.replace("/", "_")
-        cache_file = self.instructions_dir / f"{version}_{safe_model}.json"
+        # Use only version in filename
+        cache_file = self.instructions_dir / f"{version}.json"
 
         try:
             with open(cache_file, "w", encoding="utf-8") as f:
@@ -133,12 +131,10 @@ class InstructionCache:
                 stat = cache_file.stat()
                 total_size += stat.st_size
 
-                # Extract version from filename (format: version_model.json)
-                filename_parts = cache_file.stem.split("_", 1)
-                if len(filename_parts) >= 1:
-                    version = filename_parts[0]
-                    if version not in versions:  # Avoid duplicates
-                        versions.append(version)
+                # Extract version from filename (format: version.json)
+                version = cache_file.stem
+                if version not in versions:  # Avoid duplicates
+                    versions.append(version)
             except OSError:
                 pass
 
@@ -161,9 +157,8 @@ class InstructionCache:
         Returns:
             True if cache entry is valid, False otherwise
         """
-        # Create safe filename from model name
-        safe_model = llm_model.replace("/", "_")
-        cache_file = self.instructions_dir / f"{version}_{safe_model}.json"
+        # Use only version in filename
+        cache_file = self.instructions_dir / f"{version}.json"
 
         if not cache_file.exists():
             return False
@@ -195,3 +190,45 @@ class InstructionCache:
 
         except (json.JSONDecodeError, OSError, KeyError, TypeError):
             return False
+
+    def get_detailed_cache_info(self) -> Dict[str, Any]:
+        """Get detailed information about cached entries.
+
+        Returns:
+            Dictionary with detailed cache information including per-version details
+        """
+        if not self.instructions_dir.exists():
+            return {
+                "cache_directory": str(self.instructions_dir),
+                "exists": False,
+                "entries": []
+            }
+
+        cache_files = list(self.instructions_dir.glob("*.json"))
+        entries = []
+
+        for cache_file in cache_files:
+            try:
+                with open(cache_file, "r", encoding="utf-8") as f:
+                    cache_data = json.load(f)
+
+                entry = {
+                    "version": cache_data.get("version", "unknown"),
+                    "created_at": cache_data.get("created_at", "unknown"),
+                    "llm_model": cache_data.get("llm_model", "unknown"),
+                    "instructions": cache_data.get("instructions", ""),
+                    "file_size_bytes": cache_file.stat().st_size
+                }
+                entries.append(entry)
+            except (json.JSONDecodeError, OSError, KeyError):
+                # Skip corrupted files
+                continue
+
+        # Sort by version
+        entries.sort(key=lambda x: x["version"])
+
+        return {
+            "cache_directory": str(self.instructions_dir),
+            "exists": True,
+            "entries": entries
+        }

@@ -75,8 +75,7 @@ class TestInstructionCache:
 
         self.cache.save_instructions(version, instructions, model)
 
-        safe_model = model.replace("/", "_")
-        cache_file = self.cache.instructions_dir / f"{version}_{safe_model}.json"
+        cache_file = self.cache.instructions_dir / f"{version}.json"
         assert cache_file.exists()
 
         with open(cache_file, "r") as f:
@@ -94,8 +93,7 @@ class TestInstructionCache:
         model = "gpt-4"
         cache_file = self.cache.instructions_dir
         cache_file.mkdir(parents=True, exist_ok=True)
-        safe_model = model.replace("/", "_")
-        cache_file = cache_file / f"{version}_{safe_model}.json"
+        cache_file = cache_file / f"{version}.json"
 
         # Create corrupted JSON file
         with open(cache_file, "w") as f:
@@ -145,7 +143,7 @@ class TestInstructionCache:
 
         # Verify files exist
         for version in versions:
-            cache_file = self.cache.instructions_dir / f"{version}_gpt-4.json"
+            cache_file = self.cache.instructions_dir / f"{version}.json"
             assert cache_file.exists()
 
         # Clear cache
@@ -154,7 +152,7 @@ class TestInstructionCache:
 
         # Verify files are gone
         for version in versions:
-            cache_file = self.cache.instructions_dir / f"{version}_gpt-4.json"
+            cache_file = self.cache.instructions_dir / f"{version}.json"
             assert not cache_file.exists()
 
         # Directory should be cleaned up too
@@ -180,8 +178,7 @@ class TestInstructionCache:
 
         # Create invalid cache file
         self.cache.instructions_dir.mkdir(parents=True, exist_ok=True)
-        safe_model = model.replace("/", "_")
-        cache_file = self.cache.instructions_dir / f"{version}_{safe_model}.json"
+        cache_file = self.cache.instructions_dir / f"{version}.json"
 
         # Missing required fields
         with open(cache_file, "w") as f:
@@ -208,7 +205,7 @@ class TestInstructionCache:
         # Save with gpt-4
         self.cache.save_instructions(version, instructions, "gpt-4")
 
-        # Try to get with different model
+        # Try to get with different model - should return None since model doesn't match
         assert self.cache.get_cached_instructions(version, "claude-3") is None
 
         # Should still work with same model
