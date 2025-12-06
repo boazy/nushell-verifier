@@ -13,7 +13,7 @@ run = "python -m pytest"
 description = "Lint the code"
 run = "ruff check ."
 
-[tasks.nushell-verifier]
+[tasks.verify]
 description = "Run nushell-verifier"
 alias = "nv"
 run = "uv run nushell-verifier"
