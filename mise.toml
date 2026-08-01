@@ -1,5 +1,5 @@
 [settings]
-python.uv_venv_auto = true
+python.uv_venv_auto = "create|source"
 
 [tools]
 python = "3.13"
